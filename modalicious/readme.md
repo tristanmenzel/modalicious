@@ -47,7 +47,7 @@ Import the module
   ...
   imports: [
     ...,
-    ModaliciousModule
+    ModaliciousModule.forRoot()
   ],
   bootstrap: [AppComponent]
 })

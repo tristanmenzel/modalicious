@@ -1,6 +1,6 @@
 {
   "name": "modalicious",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A modal service for Angular",
   "repository": "https://github.com/tristanmenzel/modalicious.git",
   "main": "src/index.ts",

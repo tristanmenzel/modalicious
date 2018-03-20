@@ -13,7 +13,7 @@ import {ModaliciousModule} from 'modalicious';
   ],
   imports: [
     BrowserModule,
-    ModaliciousModule
+    ModaliciousModule.forRoot()
   ],
   providers: [],
   entryComponents: [
