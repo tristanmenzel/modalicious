@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {ModalService} from './modal.service';
+import { ModalService } from './services/modal.service';
+export { ModalService, ModalInstance } from './services/modal.service'
 import { ModalContainerComponent } from './modal-container/modal-container.component';
-import { ModalHostDirective } from './modal-host.directive';
+import { ModalHostDirective } from './modal-host/modal-host.directive';
 
 @NgModule({
   imports: [
@@ -11,9 +12,10 @@ import { ModalHostDirective } from './modal-host.directive';
   providers: [
     ModalService
   ],
-  entryComponents:[
+  entryComponents: [
     ModalContainerComponent
   ],
   declarations: [ModalContainerComponent, ModalHostDirective]
 })
-export class ModaliciousModule { }
+export class ModaliciousModule {
+}

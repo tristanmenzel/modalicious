@@ -1,5 +1,5 @@
 import {Component, ViewContainerRef} from '@angular/core';
-import {ModalService} from './modalicious/modal.service';
+import {ModalService} from 'modalicious';
 import {DemoModalComponent} from './demo-modal/demo-modal.component';
 
 @Component({

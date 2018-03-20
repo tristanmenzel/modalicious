@@ -1,0 +1,29 @@
+{
+  "name": "modalicious",
+  "version": "0.0.1",
+  "description": "A modal service for Angular",
+  "repository": "https://github.com/tristanmenzel/modalicious.git",
+  "main": "src/index.ts",
+  "readme": "readme.md",
+  "scripts": {
+    "package": "ng-packagr -p ng-package.json",
+    "pack": "npm run package && npm pack ./dist",
+    "publish": "npm run package && npm publish ./dist"
+  },
+  "keywords": [
+    "Angular",
+    "Modal"
+  ],
+  "author": "Tristan Menzel",
+  "license": "MIT",
+  "dependencies": {
+    "@angular/common": "^5.2.9",
+    "@angular/core": "^5.0.0"
+  },
+  "devDependencies": {
+    "@angular/compiler": "^5.2.9",
+    "@angular/compiler-cli": "^5.2.9",
+    "ng-packagr": "^2.2.0",
+    "typescript": "^2.7.2"
+  }
+}

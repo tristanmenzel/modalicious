@@ -1,5 +1,5 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {ModalHostDirective} from '../modal-host.directive';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ModalHostDirective } from '../modal-host/modal-host.directive';
 
 @Component({
   selector: 'mod-modal-container',

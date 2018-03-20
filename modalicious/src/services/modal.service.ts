@@ -1,6 +1,6 @@
-import {ComponentFactoryResolver, Injectable, ViewContainerRef} from '@angular/core';
-import {Type} from '@angular/core/src/type';
-import {ModalContainerComponent} from './modal-container/modal-container.component';
+import { ApplicationRef, ComponentFactoryResolver, Injectable, Injector, ViewContainerRef } from '@angular/core';
+import { Type } from '@angular/core/src/type';
+import { ModalContainerComponent } from '../modal-container/modal-container.component';
 
 
 const noViewContainerRefMessage =
@@ -10,7 +10,8 @@ const noViewContainerRefMessage =
 export class ModalService {
   private rootViewContainer: ViewContainerRef;
 
-  constructor(private factoryResolver: ComponentFactoryResolver) {
+  constructor(private factoryResolver: ComponentFactoryResolver,
+              private appRef: ApplicationRef) {
   }
 
   setRootViewContainerRef(viewContainerRef: ViewContainerRef) {
@@ -31,10 +32,25 @@ export class ModalService {
     const modalFactory = this.factoryResolver
       .resolveComponentFactory(componentClass);
 
+    const modalInstance = new ModalInstance(() => {
+      this.appRef.detachView(containerComponent.hostView);
+      containerComponent.destroy();
+    });
+
+    const injector = Injector.create([
+      { provide: ModalInstance, useValue: modalInstance }
+    ], this.rootViewContainer.parentInjector);
+
     const modalComponent = modalFactory
-      .create(modalHostView.parentInjector);
+      .create(injector);
 
     modalHostView.insert(modalComponent.hostView);
     this.rootViewContainer.insert(containerComponent.hostView);
+  }
+}
+
+export class ModalInstance {
+  constructor(public close: () => void) {
+
   }
 }
