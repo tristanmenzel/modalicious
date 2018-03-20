@@ -10,9 +10,11 @@ import {DemoModalComponent} from './demo-modal/demo-modal.component';
 export class AppComponent {
   constructor(private modalService: ModalService, viewContainerRef: ViewContainerRef) {
     this.modalService.setRootViewContainerRef(viewContainerRef);
+    this.modalService.setModalPositioning(true);
   }
 
-  go() {
-    this.modalService.showModal(DemoModalComponent);
+  async showTheDemoModal() {
+    const res = await this.modalService.show<number, DemoModalComponent>(DemoModalComponent);
+    console.log(res);
   }
 }

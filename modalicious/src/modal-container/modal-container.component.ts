@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostBinding, Input, OnInit, ViewChild } from '@angular/core';
 import { ModalHostDirective } from '../modal-host/modal-host.directive';
 
 @Component({
@@ -6,14 +6,18 @@ import { ModalHostDirective } from '../modal-host/modal-host.directive';
   templateUrl: './modal-container.component.html',
   styleUrls: ['./modal-container.component.scss']
 })
-export class ModalContainerComponent implements OnInit {
+export class ModalContainerComponent {
+
+  @Input() useFixedPosition: boolean = false;
 
   @ViewChild(ModalHostDirective) public modalHost: ModalHostDirective;
 
-  constructor() {
+  @HostBinding('style.position')
+  private get positionStyle() {
+    return this.useFixedPosition ? 'fixed' : 'absolute';
   }
 
-  ngOnInit() {
+  constructor() {
   }
 
 }

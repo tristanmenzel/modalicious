@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ModalInstance} from 'modalicious';
+import {ModalInstanceService} from 'modalicious';
 
 @Component({
   selector: 'app-demo-modal',
@@ -8,14 +8,14 @@ import {ModalInstance} from 'modalicious';
 })
 export class DemoModalComponent implements OnInit {
 
-  constructor(private modalInstance: ModalInstance) {
+  constructor(private modalInstance: ModalInstanceService) {
   }
 
   ngOnInit() {
   }
 
   close() {
-    this.modalInstance.close();
+    this.modalInstance.resolve();
   }
 
 }

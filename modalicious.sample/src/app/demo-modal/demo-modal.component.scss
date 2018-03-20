@@ -1,8 +1,10 @@
 :host {
   max-width: 400px;
-  margin: 0 auto;
-
-
+  margin: 1rem auto;
+  box-sizing: border-box;
+  @media screen and (max-width: 432px) {
+    margin: .5rem;
+  }
 
   background-color: #fff;
   border-radius: .25rem;

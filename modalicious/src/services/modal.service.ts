@@ -1,56 +1,72 @@
 import { ApplicationRef, ComponentFactoryResolver, Injectable, Injector, ViewContainerRef } from '@angular/core';
 import { Type } from '@angular/core/src/type';
 import { ModalContainerComponent } from '../modal-container/modal-container.component';
+import { ModalInstanceService } from "./modal-instance.service";
 
 
 const noViewContainerRefMessage =
-  `Modalicious: You must call setRootViewContainerRef on ModalService from your root component before calling showModal`;
+  `Modalicious: You must call setRootViewContainerRef on ModalService from your root component before calling ModalService.show()`;
 
 @Injectable()
 export class ModalService {
   private rootViewContainer: ViewContainerRef;
+  private defaultToFixedPositioning: boolean;
 
   constructor(private factoryResolver: ComponentFactoryResolver,
               private appRef: ApplicationRef) {
+  }
+
+  setModalPositioning(useFixed: boolean) {
+    this.defaultToFixedPositioning = useFixed;
   }
 
   setRootViewContainerRef(viewContainerRef: ViewContainerRef) {
     this.rootViewContainer = viewContainerRef;
   }
 
-  showModal<T>(componentClass: Type<T>) {
-    if (!this.rootViewContainer) throw new Error('You must call ');
+  show<TResult, TComponent>(componentClass: Type<TComponent>): Promise<TResult> {
+    if (!this.rootViewContainer) throw new Error(noViewContainerRefMessage);
 
+    return new Promise<TResult>((resolve, reject) => {
 
-    const containerFactory = this.factoryResolver
-      .resolveComponentFactory(ModalContainerComponent);
-    const containerComponent = containerFactory
-      .create(this.rootViewContainer.parentInjector);
+      const containerFactory = this.factoryResolver
+        .resolveComponentFactory(ModalContainerComponent);
+      const containerComponent = containerFactory
+        .create(this.rootViewContainer.parentInjector);
 
-    const modalHostView = containerComponent.instance.modalHost.viewContainerRef;
+      if (this.defaultToFixedPositioning) {
+        containerComponent.instance.useFixedPosition = true;
+      }
 
-    const modalFactory = this.factoryResolver
-      .resolveComponentFactory(componentClass);
+      const modalHostView = containerComponent.instance.modalHost.viewContainerRef;
 
-    const modalInstance = new ModalInstance(() => {
-      this.appRef.detachView(containerComponent.hostView);
-      containerComponent.destroy();
+      const modalFactory = this.factoryResolver
+        .resolveComponentFactory(componentClass);
+
+      const close = () => {
+        this.appRef.detachView(containerComponent.hostView);
+        containerComponent.destroy();
+      };
+
+      const modalInstance = new ModalInstanceService((reason?: string) => {
+        close();
+        reject(reason);
+
+      }, (result: any) => {
+        close();
+        resolve(result);
+      });
+
+      const injector = Injector.create([
+        { provide: ModalInstanceService, useValue: modalInstance }
+      ], this.rootViewContainer.parentInjector);
+
+      const modalComponent = modalFactory
+        .create(injector);
+
+      modalHostView.insert(modalComponent.hostView);
+      this.rootViewContainer.insert(containerComponent.hostView);
     });
-
-    const injector = Injector.create([
-      { provide: ModalInstance, useValue: modalInstance }
-    ], this.rootViewContainer.parentInjector);
-
-    const modalComponent = modalFactory
-      .create(injector);
-
-    modalHostView.insert(modalComponent.hostView);
-    this.rootViewContainer.insert(containerComponent.hostView);
   }
 }
 
-export class ModalInstance {
-  constructor(public close: () => void) {
-
-  }
-}

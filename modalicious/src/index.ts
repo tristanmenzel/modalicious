@@ -1,9 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ModalService } from './services/modal.service';
-export { ModalService, ModalInstance } from './services/modal.service'
 import { ModalContainerComponent } from './modal-container/modal-container.component';
 import { ModalHostDirective } from './modal-host/modal-host.directive';
+import { ModalCloseDirective } from "./modal-close/modal-close.directive";
+
+export { ModalService} from './services/modal.service'
+export { ModalInstanceService } from './services/modal-instance.service'
+export { ModalCloseDirective } from "./modal-close/modal-close.directive";
 
 @NgModule({
   imports: [
@@ -15,7 +19,10 @@ import { ModalHostDirective } from './modal-host/modal-host.directive';
   entryComponents: [
     ModalContainerComponent
   ],
-  declarations: [ModalContainerComponent, ModalHostDirective]
+  declarations: [ModalContainerComponent, ModalHostDirective, ModalCloseDirective],
+  exports: [
+    ModalCloseDirective
+  ]
 })
 export class ModaliciousModule {
 }
