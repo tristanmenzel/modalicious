@@ -1,6 +1,6 @@
 import {Component, ViewContainerRef} from '@angular/core';
 import {ModalService} from 'modalicious';
-import {DemoModalComponent} from './demo-modal/demo-modal.component';
+import {DemoModalColor, DemoModalComponent} from './demo-modal/demo-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +14,10 @@ export class AppComponent {
   }
 
   async showTheDemoModal() {
-    const res = await this.modalService.show<number, DemoModalComponent>(DemoModalComponent);
+    const res = await this.modalService.show<number, DemoModalComponent>(DemoModalComponent, [
+      { provide: 'name', useValue: 'Jimmy Two Shoes'},
+      { provide: DemoModalColor, useValue: '#1140ff'}
+    ]);
     console.log(res);
   }
 }

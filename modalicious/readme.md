@@ -140,3 +140,38 @@ Modal text blah blah.
 </p>
 <button class="yes-button" [mod-modal-close]="'Yes'">Yes</button>
 ```
+
+
+### Providing additional values to the modal
+
+You can pass services to the modal component by taking a dependency on them as you usually would in the constructor, 
+then pass your own providers to the `ModalService.Show()` method. These providers will only be scoped to that modal. 
+For non-class dependencies you will need to use the `@Inject` annotation 
+
+```ts
+/* demo-modal.component.ts */
+export const DemoModalColor = new InjectionToken<string>('demo-modal.color');
+
+
+export class DemoModalComponent implements OnInit {
+
+  @HostBinding('style.color') color: string;
+
+  constructor(private modalInstance: ModalInstanceService,
+              @Inject('name') public name: string,
+              @Inject(DemoModalColor) public color: string) {
+  }
+```
+
+```ts
+export class AnyComponent {
+  constructor(private modalService: ModalService) {
+  }
+  
+  async showTheDemoModal() {
+    await this.modalService.show<number, DemoModalComponent>(DemoModalComponent, [
+      { provide: 'name', useValue: 'Jimmy Two Shoes'},
+      { provide: DemoModalColor, useValue: '#1140ff'}]);
+  }
+}
+```

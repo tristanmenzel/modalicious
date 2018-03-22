@@ -29,3 +29,7 @@
 ### 0.2.0
 
  - Add namespace to css classes to avoid conflicts 
+ 
+### 0.3.0
+
+ - Add ability to specify additional providers to the modal component

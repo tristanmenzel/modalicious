@@ -2,6 +2,7 @@ import { ApplicationRef, ComponentFactoryResolver, Injectable, Injector, ViewCon
 import { Type } from '@angular/core/src/type';
 import { ModalContainerComponent } from '../modal-container/modal-container.component';
 import { ModalInstanceService } from "./modal-instance.service";
+import { StaticProvider } from "@angular/core/src/di/provider";
 
 
 const noViewContainerRefMessage =
@@ -24,7 +25,7 @@ export class ModalService {
     this.rootViewContainer = viewContainerRef;
   }
 
-  show<TResult, TComponent>(componentClass: Type<TComponent>): Promise<TResult> {
+  show<TResult, TComponent>(componentClass: Type<TComponent>, providers:StaticProvider[] = []): Promise<TResult> {
     if (!this.rootViewContainer) throw new Error(noViewContainerRefMessage);
 
     return new Promise<TResult>((resolve, reject) => {
@@ -58,7 +59,8 @@ export class ModalService {
       });
 
       const injector = Injector.create([
-        { provide: ModalInstanceService, useValue: modalInstance }
+        { provide: ModalInstanceService, useValue: modalInstance },
+        ...providers
       ], this.rootViewContainer.parentInjector);
 
       const modalComponent = modalFactory
