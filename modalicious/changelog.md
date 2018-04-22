@@ -33,3 +33,7 @@
 ### 0.3.0
 
  - Add ability to specify additional providers to the modal component
+
+### 0.3.1
+
+ - Fixed css issue in firefox preventing the container from being rendered at full height
