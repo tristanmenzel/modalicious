@@ -43,3 +43,7 @@
 ### 0.4.0
 
  - Add angular animations
+
+### 0.4.1
+
+ - Update hoek dependency

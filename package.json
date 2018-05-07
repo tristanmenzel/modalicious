@@ -1,6 +1,6 @@
 {
   "name": "modalicious",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A modal service for Angular",
   "repository": "https://github.com/tristanmenzel/modalicious.git",
   "main": "src/index.ts",
@@ -17,7 +17,7 @@
   "author": "Tristan Menzel",
   "license": "MIT",
   "dependencies": {},
-  "peeprDependencies": {
+  "peerDependencies": {
     "@angular/animations": "^5.0.0",
     "@angular/common": "^5.0.0",
     "@angular/core": "^5.0.0"
