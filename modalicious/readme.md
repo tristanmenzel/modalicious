@@ -49,6 +49,8 @@ Import the module
   ...
   imports: [
     ...,
+    BrowserAnimationsModule, // Import animations module if you have not already
+    // NoopAnimationsModule, // Or import NoopAnimationsModule if you do not want animations
     ModaliciousModule.forRoot()
   ],
   bootstrap: [AppComponent]

@@ -37,3 +37,9 @@
 ### 0.3.1
 
  - Fixed css issue in firefox preventing the container from being rendered at full height
+
+## 0.4
+
+### 0.4.0
+
+ - Add angular animations

@@ -25,7 +25,7 @@ export class ModalService {
     this.rootViewContainer = viewContainerRef;
   }
 
-  show<TResult, TComponent>(componentClass: Type<TComponent>, providers:StaticProvider[] = []): Promise<TResult> {
+  show<TResult, TComponent>(componentClass: Type<TComponent>, providers: StaticProvider[] = []): Promise<TResult> {
     if (!this.rootViewContainer) throw new Error(noViewContainerRefMessage);
 
     return new Promise<TResult>((resolve, reject) => {
@@ -44,24 +44,28 @@ export class ModalService {
       const modalFactory = this.factoryResolver
         .resolveComponentFactory(componentClass);
 
-      const close = () => {
+      const close = async () => {
+        await containerComponent.instance.hide();
         this.appRef.detachView(containerComponent.hostView);
         containerComponent.destroy();
       };
 
-      const modalInstance = new ModalInstanceService((reason?: string) => {
-        close();
+      const modalInstance = new ModalInstanceService(async (reason?: string) => {
+        await close();
         reject(reason);
 
-      }, (result: any) => {
-        close();
+      }, async (result: any) => {
+        await close();
         resolve(result);
       });
 
-      const injector = Injector.create([
-        { provide: ModalInstanceService, useValue: modalInstance },
-        ...providers
-      ], this.rootViewContainer.parentInjector);
+      const injector = Injector.create({
+        providers: [
+          { provide: ModalInstanceService, useValue: modalInstance },
+          ...providers
+        ],
+        parent: this.rootViewContainer.parentInjector
+      });
 
       const modalComponent = modalFactory
         .create(injector);
