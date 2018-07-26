@@ -58,7 +58,7 @@ export class ModalContainerComponent implements AfterViewInit {
 
 
   @HostBinding('style.position')
-  private get positionStyle() {
+  public get positionStyle() {
     return this.useFixedPosition ? 'fixed' : 'absolute';
   }
 

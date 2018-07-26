@@ -47,3 +47,9 @@
 ### 0.4.1
 
  - Update hoek dependency
+
+## 0.5
+
+### 0.5.0
+
+ - Upgrade to angular 6
