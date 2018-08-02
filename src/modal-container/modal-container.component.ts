@@ -1,6 +1,7 @@
-import { AfterViewInit, Component, HostBinding, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, HostBinding, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { ModalHostDirective } from '../modal-host/modal-host.directive';
 import { animate, state, style, transition, trigger } from '@angular/animations'
+import { ModalInstanceService } from "../services/modal-instance.service";
 
 @Component({
   selector: 'mod-modal-container',
@@ -46,7 +47,7 @@ export class ModalContainerComponent implements AfterViewInit {
   @ViewChild(ModalHostDirective) public modalHost: ModalHostDirective;
 
   get backdrop() {
-    return this.showBackdrop ? 'active': 'inactive';
+    return this.showBackdrop ? 'active' : 'inactive';
   }
 
   showContent: boolean = false;
@@ -56,13 +57,20 @@ export class ModalContainerComponent implements AfterViewInit {
     return this.showContent ? 'visible' : 'hidden';
   }
 
+  @HostListener('keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      this.modalInstanceService.cancel('Escape key hit');
+      event.preventDefault();
+    }
+  }
 
   @HostBinding('style.position')
   public get positionStyle() {
     return this.useFixedPosition ? 'fixed' : 'absolute';
   }
 
-  constructor() {
+  constructor(private modalInstanceService: ModalInstanceService) {
   }
 
   ngAfterViewInit() {

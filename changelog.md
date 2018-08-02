@@ -53,3 +53,8 @@
 ### 0.5.0
 
  - Upgrade to angular 6
+
+### 0.5.1
+
+ - Remove generic type for modal results as the type wasn't enforcing any really safety
+ - Add escape key handler to dismiss modal

@@ -103,7 +103,7 @@ export class AnyComponent {
   
   async showTheDemoModal() {
     // You can optionally await a response from the modal when it is closed (see below)
-    const res = await this.modalService.show<number, DemoModalComponent>(DemoModalComponent);
+    const res: number = await this.modalService.show< DemoModalComponent>(DemoModalComponent);
   }
 }
 ```
@@ -173,7 +173,7 @@ export class AnyComponent {
   }
   
   async showTheDemoModal() {
-    await this.modalService.show<number, DemoModalComponent>(DemoModalComponent, [
+    await this.modalService.show<DemoModalComponent>(DemoModalComponent, [
       { provide: 'name', useValue: 'Jimmy Two Shoes'},
       { provide: DemoModalColor, useValue: '#1140ff'}]);
   }

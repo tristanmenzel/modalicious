@@ -1,4 +1,11 @@
-import { ApplicationRef, ComponentFactoryResolver, Injectable, Injector, ViewContainerRef } from '@angular/core';
+import {
+  ApplicationRef,
+  ComponentFactoryResolver,
+  ComponentRef,
+  Injectable,
+  Injector,
+  ViewContainerRef
+} from '@angular/core';
 import { Type } from '@angular/core/src/type';
 import { ModalContainerComponent } from '../modal-container/modal-container.component';
 import { ModalInstanceService } from "./modal-instance.service";
@@ -25,24 +32,13 @@ export class ModalService {
     this.rootViewContainer = viewContainerRef;
   }
 
-  show<TResult, TComponent>(componentClass: Type<TComponent>, providers: StaticProvider[] = []): Promise<TResult> {
+  show<TComponent>(componentClass: Type<TComponent>, providers: StaticProvider[] = []): Promise<any> {
     if (!this.rootViewContainer) throw new Error(noViewContainerRefMessage);
 
-    return new Promise<TResult>((resolve, reject) => {
-
+    return new Promise<any>((resolve, reject) => {
+      let containerComponent: ComponentRef<ModalContainerComponent>;
       const containerFactory = this.factoryResolver
         .resolveComponentFactory(ModalContainerComponent);
-      const containerComponent = containerFactory
-        .create(this.rootViewContainer.parentInjector);
-
-      if (this.defaultToFixedPositioning) {
-        containerComponent.instance.useFixedPosition = true;
-      }
-
-      const modalHostView = containerComponent.instance.modalHost.viewContainerRef;
-
-      const modalFactory = this.factoryResolver
-        .resolveComponentFactory(componentClass);
 
       const close = async () => {
         await containerComponent.instance.hide();
@@ -53,15 +49,38 @@ export class ModalService {
       const modalInstance = new ModalInstanceService(async (reason?: string) => {
         await close();
         reject(reason);
-
       }, async (result: any) => {
         await close();
         resolve(result);
       });
 
+      function modalInstanceFactory() {
+        return modalInstance;
+      }
+
+      const containerInjector = Injector.create({
+        providers: [
+          { provide: ModalInstanceService, useFactory: modalInstanceFactory, deps: [] },
+        ],
+        parent: this.rootViewContainer.parentInjector
+      });
+
+      containerComponent = containerFactory
+        .create(containerInjector);
+
+      if (this.defaultToFixedPositioning) {
+        containerComponent.instance.useFixedPosition = true;
+      }
+
+      const modalHostView = containerComponent.instance.modalHost.viewContainerRef;
+
+      const modalFactory = this.factoryResolver
+        .resolveComponentFactory(componentClass);
+
+
       const injector = Injector.create({
         providers: [
-          { provide: ModalInstanceService, useValue: modalInstance },
+          { provide: ModalInstanceService, useFactory: modalInstanceFactory, deps: [] },
           ...providers
         ],
         parent: this.rootViewContainer.parentInjector
