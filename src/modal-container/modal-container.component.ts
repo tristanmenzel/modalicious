@@ -44,7 +44,7 @@ export class ModalContainerComponent implements AfterViewInit {
 
   @Input() useFixedPosition: boolean = false;
 
-  @ViewChild(ModalHostDirective) public modalHost: ModalHostDirective;
+  @ViewChild(ModalHostDirective, { static: true }) public modalHost: ModalHostDirective;
 
   get backdrop() {
     return this.showBackdrop ? 'active' : 'inactive';

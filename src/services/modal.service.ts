@@ -3,13 +3,11 @@ import {
   ComponentFactoryResolver,
   ComponentRef,
   Injectable,
-  Injector,
+  Injector, StaticProvider, Type,
   ViewContainerRef
 } from '@angular/core';
-import { Type } from '@angular/core/src/type';
-import { ModalContainerComponent } from '../modal-container/modal-container.component';
-import { ModalInstanceService } from "./modal-instance.service";
-import { StaticProvider } from "@angular/core/src/di/provider";
+import {ModalContainerComponent} from '../modal-container/modal-container.component';
+import {ModalInstanceService} from "./modal-instance.service";
 
 
 const noViewContainerRefMessage =
@@ -60,7 +58,7 @@ export class ModalService {
 
       const containerInjector = Injector.create({
         providers: [
-          { provide: ModalInstanceService, useFactory: modalInstanceFactory, deps: [] },
+          {provide: ModalInstanceService, useFactory: modalInstanceFactory, deps: []},
         ],
         parent: this.rootViewContainer.parentInjector
       });
@@ -80,7 +78,7 @@ export class ModalService {
 
       const injector = Injector.create({
         providers: [
-          { provide: ModalInstanceService, useFactory: modalInstanceFactory, deps: [] },
+          {provide: ModalInstanceService, useFactory: modalInstanceFactory, deps: []},
           ...providers
         ],
         parent: this.rootViewContainer.parentInjector
